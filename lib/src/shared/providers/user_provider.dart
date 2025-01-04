@@ -10,6 +10,7 @@ class CurrentUserProvider extends ChangeNotifier {
   String? get userUid => _currentUser?.uid;
   String? get userNome => _currentUser?.nome;
   String? get userEmail => _currentUser?.email;
+  String? get userLogo => _currentUser?.logoUrl;
 
   void setCurrentUser(CurrentUser user) {
     _currentUser = user;

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "297155927144",
+    "project_id": "publifly-ai",
+    "storage_bucket": "publifly-ai.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:297155927144:android:3e54e643a569b35220afdd",
+        "android_client_info": {
+          "package_name": "com.publiflyai.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBT3pl_In767AhH4PeFipB9DyHgt3fIy30"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

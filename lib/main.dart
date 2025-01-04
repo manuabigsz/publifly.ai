@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +38,7 @@ class MyAppState extends State<MyApp> {
         ),
       ],
       child: const MaterialApp(
-        title: 'Marca hora',
+        title: 'Publifly.ai',
         home: AuthOrHomePage(),
         debugShowCheckedModeBanner: false,
       ),

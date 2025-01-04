@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../features/auth/presentation/auth_page.dart';
-import '../../features/home_page/home_page.dart';
+import '../../features/home_page/home_config/home_config.dart';
 import '../../shared/providers/auth.dart';
 
 class AuthOrHomePage extends StatelessWidget {
@@ -18,6 +18,6 @@ class AuthOrHomePage extends StatelessWidget {
     }
 
     // Exibe a página Home se o usuário estiver autenticado, caso contrário, exibe o AuthForm
-    return auth.isAuth ? const HomePage() : const AuthForm();
+    return auth.isAuth ? const HomePageGeral() : const AuthForm();
   }
 }

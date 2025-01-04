@@ -2,8 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:publifly_ai/src/shared/theme/app_colors.dart';
 import '../../../data/auth/data/datasource/auth_datasource_interface.dart';
-import '../../home_page/home_page.dart';
+import '../../../shared/widgets/app_name.dart';
+import '../../home_page/home_config/home_config.dart';
 
 class AuthForm extends StatefulWidget {
   const AuthForm({super.key});
@@ -74,7 +76,7 @@ class _AuthFormState extends State<AuthForm> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (context) => const HomePage(),
+          builder: (context) => const HomePageGeral(),
         ),
         (route) => false,
       );
@@ -142,12 +144,12 @@ class _AuthFormState extends State<AuthForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.purple,
+      backgroundColor: AppColors.cinzaClaro,
       body: Stack(
         children: [
           Container(
             decoration: const BoxDecoration(
-              color: Colors.purple,
+              color: AppColors.cinzaClaro,
             ),
           ),
           Center(
@@ -158,13 +160,14 @@ class _AuthFormState extends State<AuthForm> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    const AppNameWidget(),
                     if (isSignup) ...[
                       const Row(
                         children: [
                           Text(
                             'Nome completo',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppColors.logoColor,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -185,7 +188,7 @@ class _AuthFormState extends State<AuthForm> {
                             borderSide: BorderSide.none,
                           ),
                         ),
-                        style: const TextStyle(color: Colors.white),
+                        style: const TextStyle(color: AppColors.logoColor),
                       ),
                       const SizedBox(height: 20),
                     ],
@@ -194,7 +197,7 @@ class _AuthFormState extends State<AuthForm> {
                         Text(
                           'Email',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppColors.logoColor,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -215,7 +218,7 @@ class _AuthFormState extends State<AuthForm> {
                           borderSide: BorderSide.none,
                         ),
                       ),
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: AppColors.logoColor),
                     ),
                     const SizedBox(height: 20),
                     if (!forgotPassword) ...[
@@ -224,7 +227,7 @@ class _AuthFormState extends State<AuthForm> {
                           Text(
                             'Senha',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppColors.logoColor,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -250,12 +253,12 @@ class _AuthFormState extends State<AuthForm> {
                               _obscureText
                                   ? Icons.visibility_off
                                   : Icons.visibility,
-                              color: Colors.white,
+                              color: AppColors.logoColor,
                             ),
                             onPressed: _togglePasswordVisibility,
                           ),
                         ),
-                        style: const TextStyle(color: Colors.white),
+                        style: const TextStyle(color: AppColors.logoColor),
                       ),
                     ],
                     if (isSignup) ...[
@@ -265,7 +268,7 @@ class _AuthFormState extends State<AuthForm> {
                           Text(
                             'Confirme a senha',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppColors.logoColor,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -291,12 +294,12 @@ class _AuthFormState extends State<AuthForm> {
                               _obscureText2
                                   ? Icons.visibility_off
                                   : Icons.visibility,
-                              color: Colors.white,
+                              color: AppColors.logoColor,
                             ),
                             onPressed: _togglePasswordVisibility2,
                           ),
                         ),
-                        style: const TextStyle(color: Colors.white),
+                        style: const TextStyle(color: AppColors.logoColor),
                       ),
                       const SizedBox(
                         height: 20,
@@ -317,7 +320,7 @@ class _AuthFormState extends State<AuthForm> {
                             !forgotPassword
                                 ? 'Esqueceu a senha?'
                                 : 'Entrar na conta',
-                            style: const TextStyle(color: Colors.white),
+                            style: const TextStyle(color: AppColors.logoColor),
                           ),
                         ),
                       ),
@@ -327,7 +330,7 @@ class _AuthFormState extends State<AuthForm> {
                         onPressed: _handleSubmit,
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16.0),
-                          backgroundColor: Colors.blue,
+                          backgroundColor: AppColors.greenColor,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ),
@@ -337,7 +340,7 @@ class _AuthFormState extends State<AuthForm> {
                           child: Text(
                             isSignup ? 'Registrar' : 'Entrar',
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: AppColors.logoColor,
                             ),
                           ),
                         ),
@@ -347,42 +350,47 @@ class _AuthFormState extends State<AuthForm> {
                         onPressed: _resetPassword,
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16.0),
-                          backgroundColor: Colors.white,
+                          backgroundColor: AppColors.greenColor,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
+                            borderRadius: BorderRadius.circular(10.0),
                           ),
                         ),
-                        child: const Text(
-                          'Enviar Email de Recuperação',
-                          style: TextStyle(color: Colors.white),
+                        child: const Padding(
+                          padding: EdgeInsets.only(left: 40, right: 40),
+                          child: Text(
+                            'Enviar',
+                            style: TextStyle(
+                              color: AppColors.logoColor,
+                            ),
+                          ),
                         ),
                       ),
                     const SizedBox(height: 40),
-                    // if (!forgotPassword)
-                    //   Column(
-                    //     children: [
-                    //       const SizedBox(height: 20),
-                    //       Align(
-                    //         alignment: Alignment.center,
-                    //         child: TextButton(
-                    //           onPressed: () {
-                    //             setState(() {
-                    //               forgotPassword = false;
-                    //               isSignup = !isSignup;
-                    //             });
-                    //           },
-                    //           child: Text(
-                    //             isSignup
-                    //                 ? 'Já possui uma conta? Entre agora'
-                    //                 : 'Ainda não possui conta? Registre-se agora',
-                    //             style: const TextStyle(
-                    //               color: Colors.white,
-                    //             ),
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
+                    if (!forgotPassword)
+                      Column(
+                        children: [
+                          const SizedBox(height: 20),
+                          Align(
+                            alignment: Alignment.center,
+                            child: TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  forgotPassword = false;
+                                  isSignup = !isSignup;
+                                });
+                              },
+                              child: Text(
+                                isSignup
+                                    ? 'Já possui uma conta? Entre agora'
+                                    : 'Ainda não possui conta? Registre-se agora',
+                                style: const TextStyle(
+                                  color: AppColors.logoColor,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                   ],
                 ),
               ),

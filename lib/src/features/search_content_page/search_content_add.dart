@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'search_content_result.dart';
 
 class NewSearchContentPage extends StatefulWidget {
@@ -10,7 +11,41 @@ class NewSearchContentPage extends StatefulWidget {
 }
 
 class _NewSearchContentPageState extends State<NewSearchContentPage> {
-  final double _progress = 0.75; // Valor de progresso da pesquisa
+  final TextEditingController _controller = TextEditingController();
+  double _progress = 0.0;
+
+  Future<void> _startSearch() async {
+    final String query = _controller.text.trim();
+    if (query.isEmpty) return;
+
+    setState(() {
+      _progress = 0.3;
+    });
+
+    final Uri url =
+        Uri.parse('https://publify-serper-u7el.onrender.com/search?q=$query');
+    final response = await http.get(url);
+
+    setState(() {
+      _progress = 1.0;
+    });
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> decodedResponse = json.decode(response.body);
+      final List results = decodedResponse["news"] ?? [];
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SearchContentResultPage(results: results),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao buscar resultados.')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +55,7 @@ class _NewSearchContentPageState extends State<NewSearchContentPage> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
           'Nova Pesquisa',
@@ -44,10 +77,10 @@ class _NewSearchContentPageState extends State<NewSearchContentPage> {
             ),
             const SizedBox(height: 10),
             TextField(
+              controller: _controller,
               decoration: InputDecoration(
                 hintText: 'Digite o tema para pesquisa...',
                 prefixIcon: const Icon(Icons.search),
-                suffixIcon: const Icon(Icons.mic),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: const BorderSide(color: Colors.grey),
@@ -55,24 +88,6 @@ class _NewSearchContentPageState extends State<NewSearchContentPage> {
               ),
             ),
             const SizedBox(height: 20),
-            const Text(
-              'Temas Populares',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Wrap(
-              spacing: 10,
-              children: [
-                _popularTopicChip('Marketing Digital'),
-                _popularTopicChip('SEO 2025'),
-                _popularTopicChip('Redes Sociais'),
-                _popularTopicChip('E-commerce'),
-              ],
-            ),
-            const SizedBox(height: 30),
             const Text(
               'Processando pesquisa...',
               style: TextStyle(fontSize: 16),
@@ -88,13 +103,7 @@ class _NewSearchContentPageState extends State<NewSearchContentPage> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SearchContentResultPage(),
-                      ));
-                },
+                onPressed: _startSearch,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,
                   shape: RoundedRectangleBorder(
@@ -125,14 +134,6 @@ class _NewSearchContentPageState extends State<NewSearchContentPage> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _popularTopicChip(String label) {
-    return Chip(
-      label: Text(label),
-      backgroundColor: Colors.grey[200],
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
     );
   }
 }

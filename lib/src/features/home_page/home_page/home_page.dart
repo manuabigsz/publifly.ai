@@ -92,18 +92,18 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child:
-                      _infoCard('Visualizações', '2,451', Icons.remove_red_eye),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: _infoCard('Curtidas', '847', Icons.favorite),
-                ),
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     Expanded(
+            //       child:
+            //           _infoCard('Visualizações', '2,451', Icons.remove_red_eye),
+            //     ),
+            //     const SizedBox(width: 10),
+            //     Expanded(
+            //       child: _infoCard('Curtidas', '847', Icons.favorite),
+            //     ),
+            //   ],
+            // ),
             const SizedBox(height: 30),
             const Text(
               'Conteúdo Recente',
@@ -182,15 +182,14 @@ class _HomePageState extends State<HomePage> {
               Text(time, style: const TextStyle(color: Colors.grey)),
             ],
           ),
-          Row(
+          const Row(
             children: [
-              const Icon(Icons.remove_red_eye, color: Colors.grey),
-              const SizedBox(width: 5),
-              Text(views),
-              const SizedBox(width: 15),
-              const Icon(Icons.favorite, color: Colors.grey),
-              const SizedBox(width: 5),
-              Text(likes),
+              Text(
+                'publicado',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ],
           ),
         ],

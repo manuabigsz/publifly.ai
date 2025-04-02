@@ -1,4 +1,4 @@
-package com.publiflyai.app 
+package com.publiflyai.app
 
 import io.flutter.embedding.android.FlutterActivity
 

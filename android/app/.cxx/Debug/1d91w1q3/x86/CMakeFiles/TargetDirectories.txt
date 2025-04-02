@@ -1,0 +1,2 @@
+D:/tcc/publifly_ai/android/app/.cxx/Debug/1d91w1q3/x86/CMakeFiles/edit_cache.dir
+D:/tcc/publifly_ai/android/app/.cxx/Debug/1d91w1q3/x86/CMakeFiles/rebuild_cache.dir

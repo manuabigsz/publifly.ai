@@ -1,1 +1,25 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"publifly-ai","appId":"1:297155927144:android:3e54e643a569b35220afdd","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"publifly-ai","configurations":{"android":"1:297155927144:android:3e54e643a569b35220afdd","ios":"1:297155927144:ios:72ad63912b574e3020afdd","macos":"1:297155927144:ios:72ad63912b574e3020afdd","web":"1:297155927144:web:15b13a437cd0b39320afdd","windows":"1:297155927144:web:0ab2d7346f519f2c20afdd"}}}}}}
+{
+    "flutter": {
+        "platforms": {
+            "android": {
+                "default": {
+                    "projectId": "publifly-ai",
+                    "appId": "1:297155927144:android:3e54e643a569b35220afdd",
+                    "fileOutput": "android/app/google-services.json"
+                }
+            },
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "publifly-ai",
+                    "configurations": {
+                        "android": "1:297155927144:android:3e54e643a569b35220afdd",
+                        "ios": "1:297155927144:ios:72ad63912b574e3020afdd",
+                        "macos": "1:297155927144:ios:72ad63912b574e3020afdd",
+                        "web": "1:297155927144:web:15b13a437cd0b39320afdd",
+                        "windows": "1:297155927144:web:0ab2d7346f519f2c20afdd"
+                    }
+                }
+            }
+        }
+    }
+}

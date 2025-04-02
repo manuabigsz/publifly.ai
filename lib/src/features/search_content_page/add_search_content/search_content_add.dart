@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'search_content_result.dart';
+import 'package:publifly_ai/src/features/search_content_page/add_search_content/search_content_add_controller.dart';
 
 class NewSearchContentPage extends StatefulWidget {
   const NewSearchContentPage({super.key});
@@ -11,40 +9,12 @@ class NewSearchContentPage extends StatefulWidget {
 }
 
 class _NewSearchContentPageState extends State<NewSearchContentPage> {
-  final TextEditingController _controller = TextEditingController();
-  double _progress = 0.0;
+  final SearchContentController _controller = SearchContentController();
 
-  Future<void> _startSearch() async {
-    final String query = _controller.text.trim();
-    if (query.isEmpty) return;
-
-    setState(() {
-      _progress = 0.3;
-    });
-
-    final Uri url =
-        Uri.parse('https://publify-serper-u7el.onrender.com/search?q=$query');
-    final response = await http.get(url);
-
-    setState(() {
-      _progress = 1.0;
-    });
-
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> decodedResponse = json.decode(response.body);
-      final List results = decodedResponse["news"] ?? [];
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => SearchContentResultPage(results: results),
-        ),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erro ao buscar resultados.')),
-      );
-    }
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -77,7 +47,7 @@ class _NewSearchContentPageState extends State<NewSearchContentPage> {
             ),
             const SizedBox(height: 10),
             TextField(
-              controller: _controller,
+              controller: _controller.textController,
               decoration: InputDecoration(
                 hintText: 'Digite o tema para pesquisa...',
                 prefixIcon: const Icon(Icons.search),
@@ -93,17 +63,22 @@ class _NewSearchContentPageState extends State<NewSearchContentPage> {
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 10),
-            LinearProgressIndicator(
-              value: _progress,
-              backgroundColor: Colors.grey[300],
-              color: Colors.black,
-              minHeight: 8,
+            ValueListenableBuilder<double>(
+              valueListenable: _controller.progressNotifier,
+              builder: (context, progress, child) {
+                return LinearProgressIndicator(
+                  value: progress,
+                  backgroundColor: Colors.grey[300],
+                  color: Colors.black,
+                  minHeight: 8,
+                );
+              },
             ),
             const SizedBox(height: 40),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: _startSearch,
+                onPressed: () => _controller.startSearch(context),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,
                   shape: RoundedRectangleBorder(

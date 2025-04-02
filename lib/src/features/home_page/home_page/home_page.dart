@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../contents/generate_content_page.dart';
 import '../../image_generator_page/image_generator_page.dart';
-import '../../search_content_page/search_content_add.dart';
+import '../../search_content_page/add_search_content/search_content_add.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

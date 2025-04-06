@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../../contents/generate_content_page.dart';
+import '../search_content_page/add_search_content/search_content_add.dart';
 import '../widgets/result_card.dart';
 
 class SearchContentList extends StatefulWidget {
@@ -12,6 +12,33 @@ class SearchContentList extends StatefulWidget {
 }
 
 class _SearchContentListState extends State<SearchContentList> {
+  void _deleteResult(String docId) async {
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Confirmar exclusão'),
+        content: const Text('Tem certeza que deseja excluir este item?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Excluir'),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldDelete == true) {
+      await FirebaseFirestore.instance
+          .collection('search_themes')
+          .doc(docId)
+          .delete();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,17 +68,46 @@ class _SearchContentListState extends State<SearchContentList> {
           return ListView.builder(
             itemCount: docs.length,
             itemBuilder: (context, index) {
-              final data = docs[index].data() as Map<String, dynamic>;
+              final doc = docs[index];
+              final data = doc.data() as Map<String, dynamic>;
 
               return Column(
                 children: [
-                  ResultSearchContentCard(
-                    title: data['title'] ?? 'Sem título',
-                    description: data['description'] ?? 'Sem descrição',
-                    source: data['source'] ?? 'Fonte desconhecida',
-                    readTime: data['readTime'] ?? 'Data não disponível',
-                    imageUrl: data['imageUrl'] ?? '',
-                    link: data['link'] ?? '#',
+                  Stack(
+                    children: [
+                      ResultSearchContentCard(
+                        title: data['title'] ?? 'Sem título',
+                        description: data['description'] ?? 'Sem descrição',
+                        source: data['source'] ?? 'Fonte desconhecida',
+                        readTime: data['readTime'] ?? 'Data não disponível',
+                        imageUrl: data['imageUrl'] ?? '',
+                        link: data['link'] ?? '#',
+                      ),
+                      Positioned(
+                        top: 12,
+                        right: 12,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.red.withOpacity(0.85),
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: IconButton(
+                            icon: const Icon(Icons.delete,
+                                size: 20, color: Colors.white),
+                            padding: const EdgeInsets.all(8),
+                            constraints: const BoxConstraints(),
+                            onPressed: () => _deleteResult(doc.id),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 10),
                 ],
@@ -61,15 +117,16 @@ class _SearchContentListState extends State<SearchContentList> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const ContentGeneratorPage(),
-              ),
-            );
-          }),
+        child: const Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const NewSearchContentPage(),
+            ),
+          );
+        },
+      ),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+
+import '../../util/web_view_page.dart';
 
 class ResultSearchContentCard extends StatelessWidget {
   final String title;
@@ -19,16 +20,24 @@ class ResultSearchContentCard extends StatelessWidget {
     required this.link,
   });
 
-  void _launchURL(BuildContext context) async {
-    final Uri url = Uri.parse(link);
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
-    } else {
+  void _launchURL(BuildContext context) {
+    if (link.isEmpty || link == '#') {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Não foi possível abrir o link')),
+        const SnackBar(content: Text('Link inválido')),
       );
+      return;
     }
+
+    final url = link.startsWith('http') ? link : 'https://$link';
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => InAppWebViewPage(url: url),
+      ),
+    );
   }
+
 
   @override
   Widget build(BuildContext context) {

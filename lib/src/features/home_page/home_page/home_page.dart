@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../contents/generate_content_page.dart';
+import '../../ia_contents/generate_content_page.dart';
 import '../../generate_ideia/serch_content_list/search_content_list.dart';
-import '../../image_generator_page/image_generator_page.dart';
+import '../../image_generator_page/image_generator_page/image_generator_page.dart';
 import '../../generate_ideia/search_content_page/add_search_content/search_content_add.dart';
+import '../../image_generator_page/list_images_generated/list_images_generated.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -48,14 +49,7 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const NewSearchContentPage(),
-                    ),
-                  );
-                },
+                onPressed: () {},
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,
                   shape: RoundedRectangleBorder(
@@ -63,7 +57,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 child: const Text(
-                  '+ Pesquisa de conteúdo',
+                  'Geração de conteúdo',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -76,7 +70,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const ImageGeneratorPage(),
+                      builder: (context) => const GeneratedImagesHistoryPage(),
                     ),
                   );
                 },

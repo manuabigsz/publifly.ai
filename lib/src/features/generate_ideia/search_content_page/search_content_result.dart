@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart'
-    show LaunchMode, canLaunchUrl, launchUrl;
 
 import '../widgets/result_card.dart';
 

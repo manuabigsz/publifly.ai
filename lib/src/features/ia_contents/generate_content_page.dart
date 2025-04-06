@@ -47,15 +47,15 @@ class ContentGeneratorPage extends StatelessWidget {
             ),
             const SizedBox(height: 16.0),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildMetricCard('Relevância', '85%'),
-                _buildMetricCard('SEO Score', '92%'),
-                _buildMetricCard('Alcance', '78%'),
-              ],
-            ),
-            const SizedBox(height: 16.0),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     _buildMetricCard('Relevância', '85%'),
+            //     _buildMetricCard('SEO Score', '92%'),
+            //     _buildMetricCard('Alcance', '78%'),
+            //   ],
+            // ),
+            // const SizedBox(height: 16.0),
 
             const Text(
               'Sugestões de Melhoria',

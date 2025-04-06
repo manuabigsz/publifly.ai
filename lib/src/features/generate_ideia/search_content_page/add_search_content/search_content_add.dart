@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:publifly_ai/src/features/search_content_page/add_search_content/search_content_add_controller.dart';
+import 'package:publifly_ai/src/features/generate_ideia/search_content_page/add_search_content/search_content_add_controller.dart';
 
 class NewSearchContentPage extends StatefulWidget {
   const NewSearchContentPage({super.key});

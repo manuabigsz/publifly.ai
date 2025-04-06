@@ -46,7 +46,7 @@ class ContentGeneratorPage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16.0),
-            // Métricas de engajamento
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -56,7 +56,7 @@ class ContentGeneratorPage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16.0),
-            // Sugestões de melhorias
+
             const Text(
               'Sugestões de Melhoria',
             ),

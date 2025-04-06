@@ -24,7 +24,6 @@ class SearchContentController {
       final Map<String, dynamic> decodedResponse = json.decode(response.body);
       final List results = decodedResponse["news"] ?? [];
 
-      // Salvar no Firestore
       final CollectionReference searchCollection =
           FirebaseFirestore.instance.collection('search_themes');
 

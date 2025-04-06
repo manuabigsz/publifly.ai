@@ -44,6 +44,7 @@ dependencies:
   flutter_inappwebview: ^6.1.5
   image_downloader_web: ^2.0.6
   minio: ^3.5.7
+  flutter_markdown: ^0.7.7
 
 dev_dependencies:
   flutter_test:

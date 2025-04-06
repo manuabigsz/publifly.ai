@@ -1,9 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart'
+    show FirebaseFirestore, Timestamp;
 import 'package:flutter/material.dart';
-
-import '../../ia_contents/generate_content_page.dart';
 import '../../generate_ideia/serch_content_list/search_content_list.dart';
-import '../../image_generator_page/image_generator_page/image_generator_page.dart';
-import '../../generate_ideia/search_content_page/add_search_content/search_content_add.dart';
+import '../../ia_contents/ia_contents_generated/contents_generated_page.dart';
 import '../../image_generator_page/list_images_generated/list_images_generated.dart';
 
 class HomePage extends StatefulWidget {
@@ -49,7 +48,14 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const GeneratedContentListPage(),
+                    ),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,
                   shape: RoundedRectangleBorder(
@@ -81,7 +87,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 child: const Text(
-                  '+ Gerador de imagem',
+                  'Gerador de imagem',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -108,23 +114,62 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const SizedBox(height: 10),
-            _recentContentCard(
-              'Como aumentar engajamento',
-              '245',
-              '56',
-              '2h atrás',
-            ),
-            const SizedBox(height: 10),
-            _recentContentCard(
-              'Dicas de SEO 2025',
-              '189',
-              '42',
-              '5h atrás',
+            FutureBuilder<List<Map<String, dynamic>>>(
+              future: getRecentContents(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return const Text('Erro ao carregar conteúdos recentes.');
+                }
+
+                final contents = snapshot.data ?? [];
+
+                return Column(
+                  children: contents
+                      .map((item) => Column(
+                            children: [
+                              _recentContentCard(
+                                item['title'] ?? '',
+                                timeAgo(item['timestamp'] ?? DateTime.now()),
+                              ),
+                              const SizedBox(height: 10),
+                            ],
+                          ))
+                      .toList(),
+                );
+              },
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<List<Map<String, dynamic>>> getRecentContents() async {
+    final query = await FirebaseFirestore.instance
+        .collection('generated_contents')
+        .orderBy('timestamp', descending: true)
+        .limit(2)
+        .get();
+
+    return query.docs.map((doc) {
+      final data = doc.data();
+      return {
+        'title': data['topic'] ?? '',
+        'timestamp': (data['timestamp'] as Timestamp?)?.toDate(),
+      };
+    }).toList();
+  }
+
+  String timeAgo(DateTime dateTime) {
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+
+    if (difference.inSeconds < 60) return 'agora mesmo';
+    if (difference.inMinutes < 60) return '${difference.inMinutes} min atrás';
+    if (difference.inHours < 24) return '${difference.inHours}h atrás';
+    return '${difference.inDays}d atrás';
   }
 
   Widget _infoCard(String title, String value, IconData icon) {
@@ -151,8 +196,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _recentContentCard(
-      String title, String views, String likes, String time) {
+  Widget _recentContentCard(String title, String time) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -162,30 +206,31 @@ class _HomePageState extends State<HomePage> {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  softWrap: true,
                 ),
-              ),
-              const SizedBox(height: 8),
-              Text(time, style: const TextStyle(color: Colors.grey)),
-            ],
+                const SizedBox(height: 8),
+                Text(time, style: const TextStyle(color: Colors.grey)),
+              ],
+            ),
           ),
-          const Row(
-            children: [
-              Text(
-                'publicado',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
+          const SizedBox(width: 12),
+          const Text(
+            'publicado',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),

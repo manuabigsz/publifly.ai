@@ -9,7 +9,7 @@
   
 - **Backend**: 
   - **Python**: Linguagem de programação usada para o desenvolvimento do backend.
-  - **Flask**: Micro-framework para criação de APIs RESTful em Python.
+  - **FastApi**: Micro-framework para criação de APIs RESTful em Python.
   - **Docker**: Utilizado para containerizar a aplicação backend.
   - **Render**: Plataforma de deploy do backend em um web service.
 
@@ -23,6 +23,7 @@
   - **CrewAI**: Agentes de marketing digital e automação de conteúdo.
   - **SerperAI**: API para pesquisa e coleta de dados atualizados.
   - **LLMs (OpenAI, LLama, Gemini)**: Para a geração de conteúdo (textos) e imagens automáticas.
+  - ** Geração de imagens **: usando free pollinations.ai
 
 ## Funcionalidades
 

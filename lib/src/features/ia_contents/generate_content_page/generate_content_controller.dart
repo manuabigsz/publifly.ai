@@ -11,10 +11,27 @@ class ContentGeneratorController {
   String? urlSelecionada;
   String? plataformaSelecionada;
   String? tamanhoSelecionado;
+  String? targetPublic;
+  String? tone;
   bool isLoading = false;
 
   final List<String> plataformas = ['Linkedin', 'Instagram', 'Facebook'];
   final List<String> tamanhos = ['Curto', 'Médio', 'Longo'];
+  final List<String> publics = [
+    'Empreendedores',
+    'Estudantes',
+    'Profissionais de Marketing',
+    'Desenvolvedores',
+    'Público geral'
+  ];
+
+  final List<String> tones = [
+    'Divertido',
+    'Sério',
+    'Técnico',
+    'Inspirador',
+    'Informal'
+  ];
 
   Future<List<Map<String, dynamic>>> fetchThemes() async {
     final snapshot =
@@ -32,6 +49,9 @@ class ContentGeneratorController {
     required String topic,
     required String url,
     required String platform,
+    required String textLenght,
+    required String targetPublic,
+    required String tone,
   }) async {
     final uri = Uri.parse('https://tcc-gemini-api.onrender.com/generate');
     progressNotifier.value = 0.3;
@@ -43,6 +63,9 @@ class ContentGeneratorController {
           'topic': topic,
           'url': url,
           'platform': platform.toLowerCase(),
+          "text_lenght": textLenght,
+          "target_public": targetPublic,
+          "tone": tone
         }),
       );
 

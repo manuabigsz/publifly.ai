@@ -15,6 +15,19 @@ class ContentGeneratorController {
   String? tone;
   bool isLoading = false;
 
+  String? modeloSelecionado;
+  String? modeloUrlSelecionado;
+
+  final List<Map<String, String>> modelos = [
+    {
+      'nome': 'Gemini Flash 1.5',
+      'url': 'https://tcc-gemini-api.onrender.com/generate'
+    },
+    {
+      'nome': 'Groq - Lhamma',
+      'url': 'https://tcc-groq-api.onrender.com/generate'
+    },
+  ];
   final List<String> plataformas = ['Linkedin', 'Instagram', 'Facebook'];
   final List<String> tamanhos = ['Curto', 'Médio', 'Longo'];
   final List<String> publics = [
@@ -52,8 +65,10 @@ class ContentGeneratorController {
     required String textLenght,
     required String targetPublic,
     required String tone,
+    required String urlAgente,
   }) async {
-    final uri = Uri.parse('https://tcc-gemini-api.onrender.com/generate');
+    final uri = Uri.parse(urlAgente);
+    print("solicitando para agente $urlAgente");
     progressNotifier.value = 0.3;
     try {
       final response = await http.post(
@@ -75,7 +90,8 @@ class ContentGeneratorController {
         final body = jsonDecode(utf8.decode(response.bodyBytes));
         return body['result']['raw'] as String?;
       } else {
-        print('Erro ao gerar conteúdo: ${response.statusCode}');
+        print(
+            'Erro ao gerar conteúdo: ${response.statusCode} - ${response.body}');
       }
     } catch (e) {
       print('Erro: $e');

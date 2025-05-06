@@ -4,26 +4,40 @@ import 'package:provider/provider.dart';
 import 'image_generator_controller.dart';
 
 class ImageGeneratorPage extends StatelessWidget {
-  const ImageGeneratorPage({super.key});
+  final String? imageDescription;
+  final String? contentId;
+  const ImageGeneratorPage({super.key, this.imageDescription, this.contentId});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => ImageGeneratorController(),
-      child: const _ImageGeneratorView(),
+      child: _ImageGeneratorView(
+        contentId: contentId,
+        imageDescription: imageDescription,
+      ),
     );
   }
 }
 
 class _ImageGeneratorView extends StatelessWidget {
-  const _ImageGeneratorView();
+  final String? imageDescription;
+  final String? contentId;
+  const _ImageGeneratorView({this.imageDescription, this.contentId});
 
   @override
   Widget build(BuildContext context) {
     final controller = Provider.of<ImageGeneratorController>(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (imageDescription != null &&
+          controller.textController.text != imageDescription) {
+        controller.textController.text = imageDescription!;
+      }
+    });
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Gerador de Imagens')),
+      appBar:
+          AppBar(title: Text('Gerador de Imagens - ${imageDescription ?? ''}')),
       body: SafeArea(
         child: SingleChildScrollView(
           child: IntrinsicHeight(
@@ -115,10 +129,11 @@ class _ImageGeneratorView extends StatelessWidget {
                       ),
                       ElevatedButton.icon(
                         onPressed: controller.imageUrl != null
-                            ? () => controller.salvarImagem(context)
+                            ? () => controller.salvarImagem(
+                                context, contentId! ?? '')
                             : null,
                         icon: const Icon(Icons.save),
-                        label: const Text('Salvar'),
+                        label: const Text('Salvar no banco'),
                       ),
                     ],
                   ),

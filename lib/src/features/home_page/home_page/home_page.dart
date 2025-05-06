@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart'
     show FirebaseFirestore, Timestamp;
 import 'package:flutter/material.dart';
 import '../../generate_ideia/serch_content_list/search_content_list.dart';
+import '../../ia_contents/generated_content_page/generated_content_page.dart';
 import '../../ia_contents/ia_contents_generated/contents_generated_page.dart';
 import '../../image_generator_page/list_images_generated/list_images_generated.dart';
 
@@ -131,7 +132,14 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               _recentContentCard(
                                 item['title'] ?? '',
-                                timeAgo(item['timestamp'] ?? DateTime.now()),
+                                timeAgo(
+                                  item['timestamp'] ?? DateTime.now(),
+                                ),
+                                item['plataform'] ?? 'Desconhecido',
+                                item['url'] ?? 'Desconhecido',
+                                item['content'] ?? 'Desconhecido',
+                                item['image_description'] ?? 'Desconhecido',
+                                item['image_generated_url'] ?? '',
                               ),
                               const SizedBox(height: 10),
                             ],
@@ -158,6 +166,10 @@ class _HomePageState extends State<HomePage> {
       return {
         'title': data['topic'] ?? '',
         'timestamp': (data['timestamp'] as Timestamp?)?.toDate(),
+        'plataform': data['platform'] ?? 'Desconhecido',
+        'url': data['url'] ?? 'Desconhecido',
+        'content': data['content'] ?? 'Desconhecido',
+        'image_description': data['image_description'] ?? 'Desconhecido',
       };
     }).toList();
   }
@@ -197,7 +209,14 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _recentContentCard(String title, String time) {
+  Widget _recentContentCard(
+      String title,
+      String time,
+      String plataform,
+      String url,
+      String content,
+      String imageDescription,
+      String imageGeneratedUrl) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -205,35 +224,53 @@ class _HomePageState extends State<HomePage> {
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.grey[300]!),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => GeneratedContentPage(
+                hasGenerated: true,
+                topic: title,
+                platform: plataform,
+                url: url,
+                content:
+                    '$content\n\n🖼️ Descrição da Imagem:\n$imageDescription',
+                imageGeneratedUrl: imageGeneratedUrl,
+              ),
+            ),
+          );
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    softWrap: true,
                   ),
-                  softWrap: true,
-                ),
-                const SizedBox(height: 8),
-                Text(time, style: const TextStyle(color: Colors.grey)),
-              ],
+                  const SizedBox(height: 8),
+                  Text(time, style: const TextStyle(color: Colors.grey)),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(width: 12),
-          const Text(
-            'publicado',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
+            const SizedBox(width: 12),
+            // const Text(
+            //   'publicado',
+            //   style: TextStyle(
+            //     fontWeight: FontWeight.bold,
+            //   ),
+            // ),
+          ],
+        ),
       ),
     );
   }

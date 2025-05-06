@@ -45,7 +45,7 @@ class ImageGeneratorController extends ChangeNotifier {
     }
   }
 
-  Future<void> salvarImagem(BuildContext context) async {
+  Future<void> salvarImagem(BuildContext context, String contentTitle) async {
     if (imageUrl == null) return;
 
     try {
@@ -67,7 +67,10 @@ class ImageGeneratorController extends ChangeNotifier {
         'objectUrl': objectUrl,
         'textGeneration': text,
         'createdAt': DateTime.now(),
+        'contentTitle': contentTitle,
       });
+
+      await updateGeneratedContentImage(contentTitle, objectUrl);
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Imagem salva com sucesso!')),
@@ -79,6 +82,21 @@ class ImageGeneratorController extends ChangeNotifier {
       );
     } finally {
       _setLoading(false);
+    }
+  }
+
+  Future<void> updateGeneratedContentImage(
+      String topic, String imageUrl) async {
+    final query = await FirebaseFirestore.instance
+        .collection('generated_contents')
+        .where('topic', isEqualTo: topic)
+        .limit(1)
+        .get();
+
+    if (query.docs.isNotEmpty) {
+      await query.docs.first.reference.update({
+        'image_generated_url': imageUrl,
+      });
     }
   }
 

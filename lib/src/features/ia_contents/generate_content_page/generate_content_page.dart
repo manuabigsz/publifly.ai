@@ -262,6 +262,7 @@ class _ContentGeneratorPageState extends State<ContentGeneratorPage> {
                                             url: controller.urlSelecionada!,
                                             platform: controller
                                                 .plataformaSelecionada!,
+                                            imageGeneratedUrl: '',
                                           ),
                                         ),
                                       );

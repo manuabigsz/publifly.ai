@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
+import '../../image_generator_page/image_generator_page/image_generator_page.dart';
 import 'generated_content_controller.dart';
 
 class GeneratedContentPage extends StatefulWidget {
@@ -9,6 +10,7 @@ class GeneratedContentPage extends StatefulWidget {
   final String url;
   final String platform;
   final bool hasGenerated;
+  final String imageGeneratedUrl;
 
   const GeneratedContentPage({
     super.key,
@@ -17,6 +19,7 @@ class GeneratedContentPage extends StatefulWidget {
     required this.url,
     required this.platform,
     required this.hasGenerated,
+    required this.imageGeneratedUrl,
   });
 
   @override
@@ -34,6 +37,7 @@ class _GeneratedContentPageState extends State<GeneratedContentPage> {
       topic: widget.topic,
       url: widget.url,
       platform: widget.platform,
+      imageGeneratedUrl: widget.imageGeneratedUrl,
     );
   }
 
@@ -149,12 +153,83 @@ class _GeneratedContentPageState extends State<GeneratedContentPage> {
                               ),
                             )
                           : SelectableText(controller.imageDescription),
+                      const SizedBox(height: 12),
+                      ElevatedButton.icon(
+                        onPressed: () async {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ImageGeneratorPage(
+                                  imageDescription: widget.hasGenerated
+                                      ? controller.imageDescController.text
+                                      : controller.imageDescription,
+                                  contentId: widget.topic,
+                                ),
+                              ));
+                        },
+                        icon: const Icon(Icons.download),
+                        label: const Text('Gerar Imagem'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          minimumSize: const Size(double.infinity, 52),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ),
             ],
-
+            if (controller.imageGeneratedUrl.isNotEmpty) ...[
+              const SizedBox(height: 16.0),
+              const Divider(thickness: 1.5),
+              const SizedBox(height: 16.0),
+              Text(
+                'Imagem Gerada',
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              const SizedBox(height: 16.0),
+              AspectRatio(
+                aspectRatio: 9 / 16,
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[850],
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: controller.imageGeneratedUrl != null
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Image.network(
+                            controller.imageGeneratedUrl!,
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      : const Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.image,
+                                  size: 50.0, color: Colors.white),
+                              SizedBox(height: 8.0),
+                              Text(
+                                'Imagem será exibida aqui',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ],
+                          ),
+                        ),
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              const Divider(thickness: 1.5),
+            ],
             // URL
             if (widget.url.isNotEmpty) ...[
               const SizedBox(height: 24),

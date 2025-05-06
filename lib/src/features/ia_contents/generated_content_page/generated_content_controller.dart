@@ -6,6 +6,7 @@ class GeneratedContentController {
   final String topic;
   final String url;
   final String platform;
+  final String imageGeneratedUrl;
 
   final TextEditingController contentController = TextEditingController();
   final TextEditingController imageDescController = TextEditingController();
@@ -21,6 +22,7 @@ class GeneratedContentController {
     required this.topic,
     required this.url,
     required this.platform,
+    required this.imageGeneratedUrl,
   }) {
     _separateContentAndImageDescription();
     contentController.text = mainContent;
@@ -48,6 +50,7 @@ class GeneratedContentController {
       'content': mainContent,
       'image_description': imageDescription,
       'timestamp': FieldValue.serverTimestamp(),
+      'image_generated_url': imageGeneratedUrl,
     });
 
     isSavingNotifier.value = false;

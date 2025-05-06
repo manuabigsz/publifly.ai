@@ -40,6 +40,7 @@ class GeneratedContentListPage extends StatelessWidget {
               final imageDescription = data['image_description'] ?? '';
               final url = data['url'] ?? '';
               final timestamp = data['timestamp'] as Timestamp?;
+              final imageGeneratedUrl = data['image_generated_url'] ?? '';
 
               return ListTile(
                 title: Text(topic,
@@ -63,6 +64,7 @@ class GeneratedContentListPage extends StatelessWidget {
                         url: url,
                         content:
                             '$content\n\n🖼️ Descrição da Imagem:\n$imageDescription',
+                        imageGeneratedUrl: imageGeneratedUrl,
                       ),
                     ),
                   );

@@ -25,8 +25,6 @@ class GeneratedContentPage extends StatefulWidget {
 
 class _GeneratedContentPageState extends State<GeneratedContentPage> {
   late GeneratedContentController controller;
-  final bool _isSaving = false;
-  final bool _isSaved = false;
 
   @override
   void initState() {

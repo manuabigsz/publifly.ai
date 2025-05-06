@@ -77,7 +77,7 @@ class _HomePageGeralState extends State<HomePageGeral> {
                             radius: 20.0,
                             backgroundImage: userProvider.userLogo != null
                                 ? NetworkImage(userProvider.userLogo!)
-                                : const AssetImage('assets/images/temp.png')
+                                : const AssetImage('assets/images/logo.png')
                                     as ImageProvider,
                           ),
                         ),

@@ -1,0 +1,2 @@
+C:/Users/manu/OneDrive/Documentos/flutter/publifly.ai/android/app/.cxx/Debug/48t5t3lq/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/manu/OneDrive/Documentos/flutter/publifly.ai/android/app/.cxx/Debug/48t5t3lq/x86_64/CMakeFiles/rebuild_cache.dir

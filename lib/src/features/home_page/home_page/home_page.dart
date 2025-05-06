@@ -172,6 +172,7 @@ class _HomePageState extends State<HomePage> {
     return '${difference.inDays}d atrás';
   }
 
+  // ignore: unused_element
   Widget _infoCard(String title, String value, IconData icon) {
     return Container(
       padding: const EdgeInsets.all(16),

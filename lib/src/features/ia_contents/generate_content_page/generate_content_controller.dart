@@ -54,6 +54,7 @@ class ContentGeneratorController {
       return {
         'title': data['title'],
         'url': data['link'],
+        'imageUrl': data['imageUrl'],
       };
     }).toList();
   }

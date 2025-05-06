@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import '../../generate_ideia/widgets/result_card.dart';
 import 'generate_content_controller.dart';
@@ -15,6 +16,8 @@ class _ContentGeneratorPageState extends State<ContentGeneratorPage> {
   final _formKey = GlobalKey<FormState>();
 
   bool _isLoading = false;
+  bool _isCustomTheme = false;
+  final TextEditingController _customThemeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -64,31 +67,87 @@ class _ContentGeneratorPageState extends State<ContentGeneratorPage> {
                     const SizedBox(
                       height: 10,
                     ),
-                    DropdownButtonFormField<String>(
-                      isExpanded: true,
-                      value: controller.temaSelecionado,
-                      decoration: const InputDecoration(
-                        labelText: 'Tema',
-                        border: OutlineInputBorder(),
-                      ),
-                      validator: (value) =>
-                          value == null ? 'Campo obrigatório' : null,
-                      items: temas.map((tema) {
-                        return DropdownMenuItem<String>(
-                          value: tema['title']?.toString(),
-                          child: Text(
-                            tema['title']?.toString() ?? '',
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        controller.temaSelecionado = value;
-                        controller.urlSelecionada = temas
-                            .firstWhere((t) => t['title'] == value)['url']
-                            ?.toString();
-                      },
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Tema',
+                            style: Theme.of(context).textTheme.titleMedium),
+                        TextButton.icon(
+                          onPressed: () {
+                            setState(() {
+                              _isCustomTheme = !_isCustomTheme;
+                              if (_isCustomTheme) {
+                                _customThemeController.text =
+                                    controller.temaSelecionado ?? '';
+                              } else {
+                                controller.temaSelecionado = null;
+                              }
+                            });
+                          },
+                          icon: Icon(_isCustomTheme ? Icons.list : Icons.edit),
+                          label: Text(_isCustomTheme
+                              ? 'Escolher da lista'
+                              : 'Texto livre'),
+                        ),
+                      ],
                     ),
+                    const SizedBox(height: 8.0),
+                    _isCustomTheme
+                        ? TextFormField(
+                            controller: _customThemeController,
+                            decoration: const InputDecoration(
+                              labelText: 'Tema personalizado',
+                              border: OutlineInputBorder(),
+                            ),
+                            validator: (value) =>
+                                (value == null || value.isEmpty)
+                                    ? 'Campo obrigatório'
+                                    : null,
+                            onChanged: (value) {
+                              controller.temaSelecionado = value;
+                            },
+                          )
+                        : DropdownSearch<String>(
+                            items: (filter, scrollController) => temas
+                                .where((tema) =>
+                                    (tema['title']?.toString() ?? '')
+                                        .toLowerCase()
+                                        .contains(filter.toLowerCase()))
+                                .map((tema) => tema['title']?.toString() ?? '')
+                                .toList(),
+                            popupProps: PopupProps.menu(
+                              showSearchBox: true,
+                              searchFieldProps: const TextFieldProps(
+                                decoration: InputDecoration(
+                                  hintText: 'Buscar tema...',
+                                  contentPadding:
+                                      EdgeInsets.fromLTRB(12, 12, 8, 0),
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                              menuProps: MenuProps(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            decoratorProps: const DropDownDecoratorProps(
+                              decoration: InputDecoration(
+                                labelText: 'Tema',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                            validator: (value) =>
+                                value == null ? 'Campo obrigatório' : null,
+                            onChanged: (value) {
+                              if (value != null) {
+                                controller.temaSelecionado = value;
+                                controller.urlSelecionada = temas
+                                    .firstWhere(
+                                        (t) => t['title'] == value)['url']
+                                    ?.toString();
+                              }
+                            },
+                            selectedItem: controller.temaSelecionado,
+                          ),
                     const SizedBox(height: 8.0),
                     if (controller.urlSelecionada != null)
                       ResultSearchContentCard(
@@ -97,7 +156,7 @@ class _ContentGeneratorPageState extends State<ContentGeneratorPage> {
                         source: 'Fonte desconhecida',
                         readTime: 'Data não disponível',
                         imageUrl: '',
-                        link: controller.urlSelecionada! ?? '#',
+                        link: controller.urlSelecionada!,
                       ),
                     const SizedBox(height: 16.0),
                     DropdownButtonFormField<String>(
@@ -193,6 +252,7 @@ class _ContentGeneratorPageState extends State<ContentGeneratorPage> {
 
                                     if (response != null && mounted) {
                                       Navigator.push(
+                                        // ignore: use_build_context_synchronously
                                         context,
                                         MaterialPageRoute(
                                           builder: (_) => GeneratedContentPage(

@@ -71,20 +71,22 @@ class ContentGeneratorController {
     final uri = Uri.parse(urlAgente);
     print("solicitando para agente $urlAgente");
     progressNotifier.value = 0.3;
+    final bodyData = {
+      'topic': topic,
+      'url': url,
+      'platform': platform.toLowerCase(),
+      'text_length': textLenght,
+      'target_public': targetPublic,
+      'tone': tone
+    };
+    print('bodyData {$bodyData}');
     try {
       final response = await http.post(
         uri,
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'topic': topic,
-          'url': url,
-          'platform': platform.toLowerCase(),
-          "text_lenght": textLenght,
-          "target_public": targetPublic,
-          "tone": tone
-        }),
+        body: jsonEncode(bodyData),
       );
-
+      print('Response: ${response.body}');
       progressNotifier.value = 1.0;
 
       if (response.statusCode == 200) {
